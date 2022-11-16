@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas testing</title>
+	<style type="text/css">
+		canvas {
+			background: lightgray;
+			image-rendering: pixelated;
+		}
+		img {
+			image-rendering: pixelated;
+			position: absolute;
+			top: 8px;
+			left: 8px;
+		}
+	</style>
+</head>
+<body style="display: inline-block;">
+	<img id="theimg" src="out.png">
+	<canvas id="canvas" width="900" height="900"></canvas>
+	<input type="range" min=0 max=1 step=0.1 id=slider>
+</body>
+<script type="text/javascript">
+window.onload = () => {
+	slider.onchange = () => {
+		theimg.style.opacity = slider.value;
+	};
+	let ctx = canvas.getContext("2d");
+	ctx.imageRedndering
+	canvas.width = theimg.width;
+	canvas.height = theimg.height;
+	ctx.drawImage(theimg, 0, 0);
+
+	let points = [
+  { x: 71, y: 56, w: 50, h: 190 },
+  { x: 113, y: 96, w: 40, h: 120 },
+  { x: 121, y: 96, w: 32, h: 120 },
+  { x: 121, y: 216, w: 32, h: 0 },
+  { x: 153, y: 94, w: 24, h: 44 },
+  { x: 153, y: 138, w: 24, h: 0 }
+]
+
+	for(let i = 0; i < points.length; i++) {
+		let p = points[i];
+
+		ctx.beginPath();
+		ctx.fillStyle = randomCol(0.9);
+		ctx.fillRect(p.x, p.y, p.w, p.h);
+	}
+}
+
+function randomCol(alpha) {
+	let r = Math.floor(Math.random() * 255);
+	let g = Math.floor(Math.random() * 255);
+	let b = Math.floor(Math.random() * 255);
+	let a = alpha;
+	return `rgba(${r},${g},${b},${alpha})`;
+}
+</script>
+</html>
