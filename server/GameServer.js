@@ -1,5 +1,6 @@
 import fs from "fs";
 import RoomManager from "./RoomManager.js";
+import ViewManager from "./ViewManager.js";
 
 const MOVES_LOCATION = "./server/moves";
 
@@ -10,20 +11,29 @@ export default class GameServer {
 		this.config = config;
 		this.app = app;
 		this.roomManager = new RoomManager(config);
+		this.viewManager = new ViewManager(this, config);
 		this.io = io;
 		this.bindEvents();
-		console.log(this.getRandomMove());
+		this.bindRoutes();
+		//console.log(this.getRandomMove());
 	}
 
 	bindEvents() {
 		this.io.on('connection', (socket) => {
 			console.log('a user connected');
 		});
+	}
+
+	bindRoutes() {
 		this.app.post("/createRoom", (req, res) => {
 			res.status(200).send(this.roomManager.createRoom().id);
 		});
 		this.app.post("/joinRoom", (req, res) => {
 			res.sendStatus(404);
+		});
+		this.app.get("/room/:roomID", (req, res) => {
+			console.log(req.params)
+			res.status(200).send(this.viewManager.render("game.ejs", {wow:321}));
 		});
 	}
 

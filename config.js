@@ -1,3 +1,4 @@
 export default {
-	port: 10801
+	port: 10801,
+	views: "./views"
 };
