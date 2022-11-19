@@ -25,15 +25,28 @@ export default class GameServer {
 	}
 
 	bindRoutes() {
+		this.app.get("/", (req, res) => {
+			return res.status(200).send(this.viewManager.render("index.ejs"));
+		});
 		this.app.post("/createRoom", (req, res) => {
-			res.status(200).send(this.roomManager.createRoom().id);
+			return res.status(200).send(this.roomManager.createRoom().id);
 		});
 		this.app.post("/joinRoom", (req, res) => {
-			res.sendStatus(404);
+			return res.sendStatus(404);
 		});
 		this.app.get("/room/:roomID", (req, res) => {
-			console.log(req.params)
-			res.status(200).send(this.viewManager.render("game.ejs", {wow:321}));
+			let roomID = req.params.roomID;
+
+			//TEST
+			roomID = this.roomManager.createRoom().id;
+
+			if(!this.roomManager.hasRoom(roomID)) {
+				return res.sendStatus(404);
+			}
+
+			return res.status(200).send(this.viewManager.render("game.ejs", {
+				roomID: roomID
+			}));
 		});
 	}
 

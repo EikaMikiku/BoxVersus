@@ -26,6 +26,10 @@ export default class RoomManager {
 		this.rooms.push(room);
 		return room;
 	}
+
+	hasRoom(roomID) {
+		return !!this.rooms.find(room => room.id === roomID);
+	}
 };
 
 class Room {

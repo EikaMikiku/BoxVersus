@@ -1,0 +1,15 @@
+<%
+	let headTitle = locals.headTitle || locals.server.config.headView.defaultTitle;
+	let headDescription = locals.headDescription || locals.server.config.headView.defaultDescription;
+%>
+<html data-theme="dark">
+<head>
+	<meta property="og:title" content="<%=headTitle%>" />
+	<meta property="og:image" content="/img/favicon.png" />
+	<meta property="og:description" content="<%=headDescription%>" />
+	<meta property="og:type" content="website" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title><%=headTitle%></title>
+	<link rel="shortcut icon" href="/img/favicon.png" type="image/png">
+	<link rel="stylesheet" type="text/css" href="/css/minstyle.io.css">
+</head>

@@ -1,4 +1,4 @@
-<%- server.viewManager.render("top.ejs", {nice:123}); %>
-<%
-	print("|"+JSON.stringify(wow))
-%>
+<%- server.viewManager.render("head.ejs", locals); %>
+<body>
+	<%=roomID%>
+</body>
