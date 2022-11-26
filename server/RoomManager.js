@@ -28,13 +28,61 @@ export default class RoomManager {
 	}
 
 	hasRoom(roomID) {
-		return !!this.rooms.find(room => room.id === roomID);
+		return !!this.getRoom(roomID);
 	}
-};
+
+	getRoom(roomID) {
+		return this.rooms.find(room => room.id === roomID);
+	}
+
+	getRoomByPlayerSocketID(socketID) {
+		return this.rooms.find(room => room.getPlayerBySocketID(socketID));
+	}
+
+	startRoomExpiry(room) {
+		room.startExpiring(() => {
+			let idx = this.rooms.findIndex(r => r.id === room.id);
+			this.rooms.splice(idx, 1);
+		});
+	}
+
+	stopRoomExpiry(room) {
+		room.stopExpiring();
+	}
+}
 
 class Room {
+	#expiryTimer = null;
+
 	constructor(id) {
 		this.id = id;
+		this.players = [];
+	}
+
+	addPlayer(player) {
+		return this.players.push(player);
+	}
+
+	getPlayerBySocketID(socketID) {
+		return this.players.find(player => player.socket.id === socketID);
+	}
+
+	removePlayerBySocketID(socketID) {
+		let idx = this.players.findIndex(p => p.socket.id === socketID);
+		return this.players.splice(idx, 1);
+	}
+
+	startExpiring(cb) {
+		if(this.#expiryTimer) {
+			console.error(`Room ${this.id} is already expiring. Something went wrong.`);
+			stopExpiring();
+		}
+		this.#expiryTimer = setTimeout(() => cb(), 1000 * 600 * 5); //5min
+	}
+
+	stopExpiring() {
+		clearTimeout(this.#expiryTimer);
+		this.#expiryTimer = null;
 	}
 }
 

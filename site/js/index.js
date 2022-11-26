@@ -4,8 +4,11 @@ CreateRoomButton.onclick = function() {
 		cache: "no-cache"
 	})
 	.then(r => r.text())
-	.then(roomid => console.log(`Room ID: ${roomid}`));
+	.then(roomID => {
+		alert(`Room ID: ${roomID}`);
+		window.location = "/room/" + roomID;
+	});
 };
 JoinRoomButton.onclick = function() {
-	alert("Not implemented yet :(");
+	window.location = "/room/" + prompt("Enter a room ID:");
 };

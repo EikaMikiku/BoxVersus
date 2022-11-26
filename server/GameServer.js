@@ -1,6 +1,7 @@
 import fs from "fs";
 import RoomManager from "./RoomManager.js";
 import ViewManager from "./ViewManager.js";
+import Player from "./Player.js";
 
 const MOVES_LOCATION = "./server/moves";
 
@@ -15,12 +16,64 @@ export default class GameServer {
 		this.io = io;
 		this.bindEvents();
 		this.bindRoutes();
-		//console.log(this.getRandomMove());
+
+		setInterval(() => {
+			for(let room of this.roomManager.rooms) {
+				console.log(room.id);
+				console.log("Player count", room.players.length);
+				console.log("Players", room.players.reduce((acc, curr) => acc + curr.username + ", ", ""));
+				console.log("----------");
+			}
+			console.log("===============");
+			console.log("===============");
+		}, 1000);
 	}
 
 	bindEvents() {
-		this.io.on('connection', (socket) => {
-			console.log('a user connected');
+		this.io.on("connection", (socket) => {
+			socket.on("join room", (roomID, username) => {
+				let room = this.roomManager.getRoom(roomID);
+				if(!room) return;
+
+				let player = new Player(socket, username);
+				room.addPlayer(player);
+				socket.join(room.id);
+				socket.to(room.id).emit("player joined", {
+					username: player.username
+				});
+				this.roomManager.stopRoomExpiry(room);
+			});
+
+			socket.on("chat message", (content) => {
+				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
+				if(!room) return;
+
+				let player = room.getPlayerBySocketID(socket.id);
+				if(!player) return;
+
+				this.io.to(room.id).emit("chat message", {
+					time: Date.now(),
+					username: player.username,
+					content: content
+				});
+			});
+
+			socket.on("disconnect", (reason) => {
+				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
+				if(!room) return;
+
+				let player = room.getPlayerBySocketID(socket.id);
+				if(!player) return;
+
+				room.removePlayerBySocketID(socket.id);
+				this.io.to(room.id).emit("player left", {
+					username: player.username
+				});
+
+				if(room.players.length === 0) {
+					this.roomManager.startRoomExpiry(room);
+				}
+			});
 		});
 	}
 
@@ -36,9 +89,6 @@ export default class GameServer {
 		});
 		this.app.get("/room/:roomID", (req, res) => {
 			let roomID = req.params.roomID;
-
-			//TEST
-			roomID = this.roomManager.createRoom().id;
 
 			if(!this.roomManager.hasRoom(roomID)) {
 				return res.sendStatus(404);
@@ -69,4 +119,4 @@ export default class GameServer {
 			data: JSON.parse(fs.readFileSync(`${MOVES_LOCATION}/${rndChar}/${rndMove}`, "UTF-8"))
 		};
 	}
-};
+}

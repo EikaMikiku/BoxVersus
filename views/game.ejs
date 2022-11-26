@@ -1,4 +1,29 @@
 <%- server.viewManager.render("head.ejs", locals); %>
 <body>
-	<%=roomID%>
+	<script>
+		window.ROOMID = "<%=roomID%>";
+		window.SOCKET = io();
+		window.SOCKET.on("connect", () => {
+			let username = window.localStorage.getItem("username") || prompt("Enter your username");
+			window.localStorage.setItem("username", username);
+			window.SOCKET.emit("join room", window.ROOMID, window.localStorage.getItem("username"));
+		});
+	</script>
+	<div class="ms-hero">
+		<div class="ms-hero-body ms-text-center">
+			<h1 class="ms-hero-title"><%=roomID%>%></h1>
+		</div>
+	</div>
+	<div id="RoomManagementContainer"></div>
+	<div id="PlayerListContainer"></div>
+	<div id="ControlsContainer"></div>
+	<div id="ChatContainer">
+		<div id="ChatMessages"></div>
+		<input id="ChatInput" type="text" placeholder="Hit Enter to send...">
+	</div>
+	<script src="/js/chat.js"></script>
+
+	<div id="TargetDrawingContainer"></div>
+	<div id="DrawingContainer"></div>
+
 </body>

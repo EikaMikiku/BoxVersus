@@ -23,4 +23,4 @@ export default class ViewManager {
 		data.server = this.server;
 		return this.views[name](data);
 	}
-};
+}
