@@ -24,6 +24,7 @@ export default class RoomManager {
 
 		var room = new Room(genid);
 		this.rooms.push(room);
+		this.startRoomExpiry(room);
 		return room;
 	}
 
@@ -77,7 +78,7 @@ class Room {
 			console.error(`Room ${this.id} is already expiring. Something went wrong.`);
 			stopExpiring();
 		}
-		this.#expiryTimer = setTimeout(() => cb(), 1000 * 600 * 5); //5min
+		this.#expiryTimer = setTimeout(() => cb(), 1000 * 60 * 5); //5min
 	}
 
 	stopExpiring() {
