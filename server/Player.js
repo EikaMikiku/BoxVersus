@@ -10,7 +10,8 @@ export default class Player {
 
 	getData() {
 		return {
-			username: this.username
+			username: this.username,
+			socketID: this.socket.id
 		};
 	}
 }

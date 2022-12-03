@@ -20,7 +20,11 @@ window.addEventListener("load", () => {
 		for(let player of list) {
 			let div = document.createElement("div");
 			div.className = "player";
-			div.innerText = player.username;
+			if(player.socketID === window.SOCKET.id) {
+				div.innerText = "(You) " + player.username;
+			} else {
+				div.innerText = player.username;
+			}
 
 			PlayerList.appendChild(div);
 		}

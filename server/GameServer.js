@@ -54,7 +54,8 @@ export default class GameServer {
 				this.io.to(room.id).emit("chat message", {
 					time: Date.now(),
 					username: player.username,
-					content: content
+					content: content,
+					socketID: socket.id
 				});
 			});
 
@@ -90,7 +91,7 @@ export default class GameServer {
 				if(!player) return;
 
 				let oldUsername = player.username;
-				if(newUsername.trim().length > 0) {
+				if(newUsername.trim().length > 0 && newUsername.trim().length < 20) {
 					player.username = newUsername;
 				} else {
 					player.username = Player.GenerateUsername();

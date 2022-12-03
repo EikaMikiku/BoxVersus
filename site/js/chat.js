@@ -25,7 +25,11 @@ window.addEventListener("load", () => {
 
 	function AddPlayerMessage(msgData) {
 		let div = document.createElement("div");
-		div.className = "message player";
+		if(msgData.socketID === window.SOCKET.id) {
+			div.className = "message player you";
+		} else {
+			div.className = "message player";
+		}
 
 		let dateSpan = document.createElement("span");
 		dateSpan.className = "date";

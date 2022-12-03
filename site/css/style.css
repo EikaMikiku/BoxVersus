@@ -36,6 +36,11 @@
 	border: 2px solid rgba(var(--default-border-color), 1);
 	border-bottom: none;
 	border-radius: var(--default-border-radius);
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+#ChatMessages br {
+	clear: both;
 }
 #ChatContainer #ChatMessages::-webkit-scrollbar
 {
@@ -49,10 +54,22 @@
 }
 #ChatContainer .message {
 	margin: 3px;
-	background: rgb(var(--primary-bg-color));
+	background: rgb(var(--action-bg-color));
 	border-radius: 5px;
 	padding: 3px 5px;
 	display: inline-block;
+}
+#ChatContainer .message.player {
+	background: rgb(var(--secondary-bg-color));
+	float: left;
+	border-top-left-radius: 0;
+	border-top-right-radius: 5px;
+}
+#ChatContainer .message.player.you {
+	background: rgb(var(--primary-bg-color));
+	float: right;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 0;
 }
 #ChatContainer .message.server {
 	margin-left: auto;
