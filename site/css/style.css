@@ -1,18 +1,26 @@
+#ControlsContainer {
+	position: absolute;
+	width: 300px;
+	right: 10px;
+	bottom: 5px;
+	text-align: right;
+	margin-right: 2px;
+}
+
 #PlayerListContainer {
 	position: absolute;
 	width: 300px;
-	right: 0;
-	top: 0;
+	right: 10px;
+	top: 10px;
 	text-align: right;
-	padding: 10px;
 }
 
 #ChatContainer {
 	position: absolute;
 	width: 300px;
 	height: 400px;
-	left: 0;
-	bottom: 0;
+	left: 10px;
+	bottom: 5px;
 }
 #ChatContainer #ChatMessages {
 	overflow-y: auto;
@@ -25,6 +33,9 @@
 	max-width: 100%;
 	word-break: break-word;
 	scroll-behavior: smooth;
+	border: 2px solid rgba(var(--default-border-color), 1);
+	border-bottom: none;
+	border-radius: var(--default-border-radius);
 }
 #ChatContainer #ChatMessages::-webkit-scrollbar
 {

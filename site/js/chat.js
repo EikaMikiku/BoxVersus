@@ -8,6 +8,9 @@ window.addEventListener("load", () => {
 	window.SOCKET.on("player joined", (msgData) => {
 		AddServerMessage(`**${msgData.username} joined**`);
 	});
+	window.SOCKET.on("username change", (msgData) => {
+		AddServerMessage(`**${msgData.prev} is now ${msgData.new}**`);
+	});
 
 	let ChatContainer = document.getElementById("ChatContainer");
 	let ChatMessages = document.getElementById("ChatMessages");

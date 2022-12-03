@@ -81,6 +81,27 @@ export default class GameServer {
 
 				socket.emit("player list", room.players.map(x => x.getData()));
 			});
+
+			socket.on("username changed", (newUsername) => {
+				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
+				if(!room) return;
+
+				let player = room.getPlayerBySocketID(socket.id);
+				if(!player) return;
+
+				let oldUsername = player.username;
+				if(newUsername.trim().length > 0) {
+					player.username = newUsername;
+				} else {
+					player.username = Player.GenerateUsername();
+				}
+
+				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
+				this.io.to(room.id).emit("username change", {
+					prev: oldUsername,
+					new: newUsername
+				});
+			});
 		});
 	}
 
