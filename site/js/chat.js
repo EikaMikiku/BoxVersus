@@ -56,5 +56,6 @@ window.addEventListener("load", () => {
 		div.appendChild(usernameSpan);
 
 		ChatMessages.appendChild(div);
+		ChatMessages.scrollTop = ChatMessages.scrollHeight;
 	}
 });

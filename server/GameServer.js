@@ -26,7 +26,7 @@ export default class GameServer {
 			}
 			console.log("===============");
 			console.log("===============");
-		}, 1000);
+		}, 5000);
 	}
 
 	bindEvents() {
@@ -73,6 +73,13 @@ export default class GameServer {
 				if(room.players.length === 0) {
 					this.roomManager.startRoomExpiry(room);
 				}
+			});
+
+			socket.on("player list", () => {
+				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
+				if(!room) return;
+
+				socket.emit("player list", room.players.map(x => x.getData()));
 			});
 		});
 	}

@@ -1,4 +1,11 @@
-
+#PlayerListContainer {
+	position: absolute;
+	width: 300px;
+	right: 0;
+	top: 0;
+	text-align: right;
+	padding: 10px;
+}
 
 #ChatContainer {
 	position: absolute;
@@ -8,16 +15,16 @@
 	bottom: 0;
 }
 #ChatContainer #ChatMessages {
-    overflow-y: auto;
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 40px;
-    display: inline-block;
-    max-width: 100%;
-    word-break: break-word;
-    scroll-behavior: smooth;
+	overflow-y: auto;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 40px;
+	display: inline-block;
+	max-width: 100%;
+	word-break: break-word;
+	scroll-behavior: smooth;
 }
 #ChatContainer #ChatMessages::-webkit-scrollbar
 {
@@ -37,10 +44,10 @@
 	display: inline-block;
 }
 #ChatContainer .message.server {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    inline-size: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	inline-size: fit-content;
 }
 #ChatContainer .message.player .date::before {
 	content: "[";

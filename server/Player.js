@@ -7,4 +7,10 @@ export default class Player {
 		this.socket = socket;
 		this.username = username || Player.GenerateUsername();
 	}
+
+	getData() {
+		return {
+			username: this.username
+		};
+	}
 }
