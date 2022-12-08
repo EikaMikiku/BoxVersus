@@ -1,3 +1,27 @@
+#TimerContainer {
+	position: absolute;
+	left: 10px;
+	top: 5px;
+}
+#Timer {
+	font-family: monospace;
+	font-size: 3em;
+}
+
+#DrawingContainer {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+}
+#DrawingCanvas {
+    background: #5a6585;
+    margin: 10px;
+    margin-top: 0;
+    border-radius: 5px;
+}
+
 #ControlsContainer {
 	position: absolute;
 	width: 300px;

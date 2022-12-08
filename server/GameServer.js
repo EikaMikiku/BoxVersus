@@ -128,9 +128,6 @@ export default class GameServer {
 		this.app.post("/createRoom", (req, res) => {
 			return res.status(200).send(this.roomManager.createRoom().id);
 		});
-		this.app.post("/joinRoom", (req, res) => {
-			return res.sendStatus(404);
-		});
 		this.app.get("/room/:roomID", (req, res) => {
 			let roomID = req.params.roomID;
 

@@ -19,7 +19,7 @@ export default class GameManager {
 
 		return {
 			char: rndChar,
-			move: rndMove,
+			move: rndMove.split(".")[0],
 			data: JSON.parse(fs.readFileSync(`${MOVES_LOCATION}/${rndChar}/${rndMove}`, "UTF-8"))
 		};
 	}

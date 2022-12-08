@@ -1,5 +1,11 @@
 <%- server.viewManager.render("head.ejs", locals); %>
 <body>
+	<style type="text/css">
+		body {
+			display: flex;
+		    justify-content: center;
+		}
+	</style>
 	<script>
 		window.ROOMID = "<%=roomID%>";
 		window.SOCKET = io();
@@ -9,24 +15,49 @@
 			window.SOCKET.emit("join room", window.ROOMID, window.localStorage.getItem("username"));
 		});
 	</script>
+
 	<div id="RoomManagementContainer"></div>
 	<div id="PlayerListContainer">
 		<div>Players in the room #<%=roomID%>:</div>
 		<div id="PlayerList"></div>
 	</div>
-	<script src="/js/playerList.js"></script>
+
 	<div id="ControlsContainer">
 		<button id="ReadyButton" class="ms-button ms-fullwidth ms-primary">Ready!</button>
 		<button id="UpdateUsernameButton" class="ms-button ms-fullwidth">Update Username</button>
 	</div>
-	<script src="/js/userControl.js"></script>
+
 	<div id="ChatContainer">
 		<div id="ChatMessages"></div>
 		<input id="ChatInput" type="text" placeholder="Hit Enter to send...">
 	</div>
+
+	<div id="TimerContainer">
+		<div id="Timer">60</div>
+	</div>
+
+	<div id="DrawingContainer" class="d-none">
+		<div>
+			<h6 id="DrawingImgDesc">Hello</h6>
+		</div>
+		<div>
+			<canvas id="DrawingCanvas"></canvas>
+		</div>
+		<div>
+			<div class="ms-btn-group">
+				<button id="HitboxBrushButton">🟥</button>
+				<button id="HurtboxBrushButton">🟩</button>
+			</div>
+			<button id="UndoButton">Undo</button>
+			<br>
+			<br>
+			<label for="DoneCheckbox" class="d-inline">Done:</label>
+			<input type="checkbox" id="DoneCheckbox" />
+		</div>
+	</div>
+
+	<script src="/js/playerList.js"></script>
+	<script src="/js/userControl.js"></script>
 	<script src="/js/chat.js"></script>
-
-	<div id="TargetDrawingContainer"></div>
-	<div id="DrawingContainer"></div>
-
+	<script src="/js/game.js"></script>
 </body>
