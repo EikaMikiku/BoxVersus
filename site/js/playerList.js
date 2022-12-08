@@ -19,7 +19,13 @@ window.addEventListener("load", () => {
 
 		for(let player of list) {
 			let div = document.createElement("div");
-			div.className = "player";
+
+			if(player.isReady) {
+				div.className = "player ready";
+			} else {
+				div.className = "player";
+			}
+
 			if(player.socketID === window.SOCKET.id) {
 				div.innerText = "(You) " + player.username;
 			} else {

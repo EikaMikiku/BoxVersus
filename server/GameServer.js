@@ -102,6 +102,22 @@ export default class GameServer {
 					new: newUsername
 				});
 			});
+
+			socket.on("player ready", () => {
+				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
+				if(!room) return;
+
+				let player = room.getPlayerBySocketID(socket.id);
+				if(!player) return;
+
+				player.isReady = true;
+
+				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
+
+				if(room.allPlayersReady() && room.players.length > 1) {
+					this.io.to(room.id).emit("game start", GameManager.GetRandomMove());
+				}
+			});
 		});
 	}
 
