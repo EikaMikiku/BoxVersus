@@ -54,13 +54,13 @@
 }
 #ChatContainer .message {
 	margin: 3px;
-	background: rgb(var(--action-bg-color));
+	background: rgb(var(--secondary-bg-color));
 	border-radius: 5px;
 	padding: 3px 5px;
 	display: inline-block;
 }
 #ChatContainer .message.player {
-	background: rgb(var(--secondary-bg-color));
+	background: rgb(var(--action-bg-color));
 	float: left;
 	border-top-left-radius: 0;
 	border-top-right-radius: 5px;

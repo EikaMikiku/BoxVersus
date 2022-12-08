@@ -9,14 +9,9 @@
 			window.SOCKET.emit("join room", window.ROOMID, window.localStorage.getItem("username"));
 		});
 	</script>
-	<div class="ms-hero">
-		<div class="ms-hero-body ms-text-center">
-			<h1 class="ms-hero-title"><%=roomID%>%></h1>
-		</div>
-	</div>
 	<div id="RoomManagementContainer"></div>
 	<div id="PlayerListContainer">
-		<div>Players in the room:</div>
+		<div>Players in the room #<%=roomID%>:</div>
 		<div id="PlayerList"></div>
 	</div>
 	<script src="/js/playerList.js"></script>

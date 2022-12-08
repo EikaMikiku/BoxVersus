@@ -6,12 +6,14 @@ export default class Player {
 	constructor(socket, username) {
 		this.socket = socket;
 		this.username = username || Player.GenerateUsername();
+		this.isReady = false;
 	}
 
 	getData() {
 		return {
 			username: this.username,
-			socketID: this.socket.id
+			socketID: this.socket.id,
+			isReady: this.isReady
 		};
 	}
 }
