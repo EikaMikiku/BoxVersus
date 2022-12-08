@@ -8,7 +8,7 @@ const HURTBOX_DIM = 2177518847;
 
 const SITEPATH = "./site";
 const SERVERPATH = "./server";
-const PATH = "./sprites";
+const PATH = "./sprites_input";
 
 const EXTRA_BG_MAP = {
 	"391718143": 0x4cff4c6E, //hurtbox only
@@ -118,8 +118,8 @@ for(let charFolder of charFolders) {
 		}
 
 		//HighlightBoxes(fullImg, hurtboxBoxes, HURTBOX);
-		//fullImg.write(`${SITEPATH}/img/sprites/${charFolder}/full/${imgName}`);
-		//noneImg.write(`${SITEPATH}/img/sprites/${charFolder}/none/${imgName}`);
+		fullImg.write(`${SITEPATH}/img/sprites/${charFolder}/full/${imgName}`);
+		noneImg.write(`${SITEPATH}/img/sprites/${charFolder}/none/${imgName}`);
 		try {
 			fs.mkdirSync(`${SERVERPATH}/moves/${charFolder}`);
 		} catch(e) {
