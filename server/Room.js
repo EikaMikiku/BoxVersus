@@ -35,4 +35,10 @@ export default  class Room {
 	allPlayersReady() {
 		return !this.players.find(player => !player.isReady);
 	}
+
+	onGameStart() {
+		for(let player of this.players) {
+			player.isReady = false;
+		}
+	}
 }

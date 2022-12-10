@@ -5,14 +5,16 @@ window.addEventListener("load", () => {
 	let DrawingBoxesCanvas = document.getElementById("DrawingBoxesCanvas");
 	let DrawingPreviewCanvas = document.getElementById("DrawingPreviewCanvas");
 	let TimeOverlay = document.getElementById("TimeOverlay");
+	let Timer = document.getElementById("Timer");
 	let HitboxBrushButton = document.getElementById("HitboxBrushButton");
 	let HurtboxBrushButton = document.getElementById("HurtboxBrushButton");
 	let UndoButton = document.getElementById("UndoButton");
 
 	const CANVAS_PADDING = 50;
+	const ROUND_TIME = 10 * 1000;
 
 	let currentBoxes = [];
-	let manager = DrawManager(onBoxDraw, getCurrentBoxes);
+	let drawManager = new DrawManager(onBoxDraw, getCurrentBoxes);
 	let ctx = DrawingBGCanvas.getContext("2d");
 
 	HitboxBrushButton.addEventListener("click", () => {
@@ -47,7 +49,24 @@ window.addEventListener("load", () => {
 			DrawingBGCanvas.parentElement.style.height = `${h}px`;
 			ctx.drawImage(img, CANVAS_PADDING, CANVAS_PADDING);
 
-			ShowTimedown();
+			ShowTimedown(() => {
+				let timer;
+				let startTime = Date.now();
+				Timer.classList.remove("d-none");
+				drawManager.canDraw = true;
+				setTimeout(() => {
+					clearInterval(timer);
+					Timer.innerText = "";
+					Timer.classList.add("d-none");
+					drawManager.canDraw = false;
+
+					window.SOCKET.emit("round result", currentBoxes);
+				}, ROUND_TIME);
+				timer = setInterval(() => {
+					let sec = (Date.now() - startTime) / 1000;
+					Timer.innerText = (ROUND_TIME / 1000 - sec).toFixed(2) + "s";
+				});
+			});
 		});
 	});
 
@@ -60,7 +79,7 @@ window.addEventListener("load", () => {
 		return currentBoxes;
 	}
 
-	function ShowTimedown() {
+	function ShowTimedown(cb) {
 		let timer = null;
 		let startTime = Date.now();
 		TimeOverlay.classList.remove("d-none");
@@ -72,6 +91,7 @@ window.addEventListener("load", () => {
 				TimeOverlay.style.opacity = 1;
 				TimeOverlay.classList.add("d-none");
 				TimeOverlay.innerText = "";
+				cb();
 			}, 950);
 		}, 3000);
 		timer = setInterval(() => {

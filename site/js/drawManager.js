@@ -1,4 +1,5 @@
 function DrawManager(onBoxDraw, getBoxes) {
+	this.canDraw = false;
 	const HITBOX = "red";
 	const HURTBOX = "lime";
 
@@ -16,6 +17,8 @@ function DrawManager(onBoxDraw, getBoxes) {
 	let currentBox = null;
 
 	DrawingPreviewCanvas.addEventListener("mousedown", (e) => {
+		if(!this.canDraw) return;
+
 		isDown = true;
 		currentBox = {
 			type: GetDrawType(),
@@ -41,6 +44,13 @@ function DrawManager(onBoxDraw, getBoxes) {
 	});
 
 	DrawingPreviewCanvas.addEventListener("mouseup", (e) => {
+		if(!this.canDraw) {
+			if(currentBox) {
+				currentBox = null;
+			}
+			return;
+		}
+
 		isDown = false;
 		if(currentBox && currentBox.end !== currentBox.start) {
 			onBoxDraw(currentBox);
