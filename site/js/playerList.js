@@ -17,13 +17,19 @@ window.addEventListener("load", () => {
 			PlayerList.removeChild(PlayerList.firstChild);
 		}
 
+		console.log(list)
 		for(let player of list) {
 			let div = document.createElement("div");
+			div.setAttribute("p-id", player.socketID);
+
+			div.classList = "player";
 
 			if(player.isReady) {
-				div.className = "player ready";
-			} else {
-				div.className = "player";
+				div.classList.add("ready");
+			}
+
+			if(player.submitted) {
+				div.classList.add("submitted");
 			}
 
 			if(player.socketID === window.SOCKET.id) {

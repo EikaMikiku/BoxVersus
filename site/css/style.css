@@ -69,6 +69,10 @@
 	color: lime;
 }
 
+#PlayerList > div.submitted::after {
+	content: " ✔️";
+}
+
 #ChatContainer {
 	position: absolute;
 	width: 300px;

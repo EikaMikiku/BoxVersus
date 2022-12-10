@@ -70,6 +70,12 @@ window.addEventListener("load", () => {
 		});
 	});
 
+	window.SOCKET.on("round results", (data) => {
+		//Show results, probably new class for canvas renders
+		//Show actual boxes
+		//Show Ready button for next round
+	});
+
 	function onBoxDraw(box) {
 		console.log("box", box);
 		currentBoxes.push(box);

@@ -114,10 +114,42 @@ export default class GameServer {
 
 				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
 
-				if(room.allPlayersReady() && room.players.length > 1) {
+				if(room.allPlayersReady() && room.players.length >= 1) {
 					this.io.to(room.id).emit("game start", GameManager.GetRandomMove());
+					room.onGameStart();
 				}
 			});
+
+			socket.on("round result", (boxData) => {
+				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
+				if(!room) return;
+
+				let player = room.getPlayerBySocketID(socket.id);
+				if(!player) return;
+
+				player.boxData = boxData;
+				//Analyze
+
+				//This is to reduce potential race conditions
+				setTimeout(() => {
+					let roundEndOK = checkForRoundEnd(room);
+					if(roundEndOK) {
+						//Send over results
+						this.io.to(room.id).emit("round results", room.players.map(x => x.getData()));
+					}
+				}, 500);
+
+				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
+			});
+
+			function checkForRoundEnd(room) {
+				for(let player in room.players) {
+					if(!player.boxData) {
+						return false;
+					}
+				}
+				return true;
+			}
 		});
 	}
 

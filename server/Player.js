@@ -7,13 +7,15 @@ export default class Player {
 		this.socket = socket;
 		this.username = username || Player.GenerateUsername();
 		this.isReady = false;
+		this.boxData = null;
 	}
 
 	getData() {
 		return {
 			username: this.username,
 			socketID: this.socket.id,
-			isReady: this.isReady
+			isReady: this.isReady,
+			submitted: !!this.boxData
 		};
 	}
 }
