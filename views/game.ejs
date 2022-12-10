@@ -41,11 +41,13 @@
 			<h6 id="DrawingImgDesc">Hello</h6>
 		</div>
 		<div>
-			<canvas id="DrawingCanvas"></canvas>
+			<canvas id="DrawingBGCanvas"></canvas>
+			<canvas id="DrawingBoxesCanvas"></canvas>
+			<canvas id="DrawingPreviewCanvas"></canvas>
 		</div>
-		<div>
+		<div style="user-select: none;">
 			<div class="ms-btn-group">
-				<button id="HitboxBrushButton">🟥</button>
+				<button id="HitboxBrushButton" class="ms-action">🟥</button>
 				<button id="HurtboxBrushButton">🟩</button>
 			</div>
 			<button id="UndoButton">Undo</button>
@@ -55,9 +57,11 @@
 			<input type="checkbox" id="DoneCheckbox" />
 		</div>
 	</div>
+	<div id="TimeOverlay" class="d-none"></div>
 
 	<script src="/js/playerList.js"></script>
 	<script src="/js/userControl.js"></script>
 	<script src="/js/chat.js"></script>
 	<script src="/js/game.js"></script>
+	<script src="/js/drawManager.js"></script>
 </body>
