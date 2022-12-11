@@ -70,12 +70,15 @@ function DrawManager(onBoxDraw, getBoxes) {
 		let boxes = getBoxes();
 		for(let box of boxes) {
 			if(box.type === HITBOX) {
-				boxesCtx.strokeStyle = "red";
+				boxesCtx.strokeStyle = DrawManager.HitboxStrokeStyle;
+				boxesCtx.fillStyle = DrawManager.HitboxFillStyle;
 			} else {
-				boxesCtx.strokeStyle = "lime";
+				boxesCtx.strokeStyle = DrawManager.HurtboxStrokeStyle;
+				boxesCtx.fillStyle = DrawManager.HurtboxFillStyle;
 			}
 			let w = box.end.x - box.start.x;
 			let h = box.end.y - box.start.y;
+			boxesCtx.fillRect(box.start.x - 0.5, box.start.y - 0.5, w, h);
 			boxesCtx.strokeRect(box.start.x - 0.5, box.start.y - 0.5, w, h);
 		}
 
@@ -85,13 +88,20 @@ function DrawManager(onBoxDraw, getBoxes) {
 		let h = currentBox.end.y - currentBox.start.y;
 
 		if(currentBox.type === HITBOX) {
-			previewCtx.strokeStyle = "red";
+			previewCtx.strokeStyle = DrawManager.HitboxStrokeStyle;
+			previewCtx.fillStyle = DrawManager.HitboxFillStyle;
 		} else {
-			previewCtx.strokeStyle = "lime";
+			previewCtx.strokeStyle = DrawManager.HurtboxStrokeStyle;
+			previewCtx.fillStyle = DrawManager.HurtboxFillStyle;
 		}
 
+		previewCtx.fillRect(currentBox.start.x - 0.5, currentBox.start.y - 0.5, w, h);
 		previewCtx.strokeRect(currentBox.start.x - 0.5, currentBox.start.y - 0.5, w, h);
 	}
 
 	requestAnimationFrame(RenderBoxes);
 }
+DrawManager.HitboxFillStyle = "rgba(255, 0, 0, 0.2)";
+DrawManager.HitboxStrokeStyle = "red";
+DrawManager.HurtboxFillStyle = "rgba(0, 255, 0, 0.2)";
+DrawManager.HurtboxStrokeStyle = "lime";

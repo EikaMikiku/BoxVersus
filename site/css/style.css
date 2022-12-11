@@ -3,19 +3,24 @@
 	flex-direction: row;
 	text-align: center;
 	z-index: 10;
-    margin-right: 310px;
+	margin-right: 310px;
 }
 #ResultsContainer canvas {
 	background: #5a6585;
 	border-radius: 5px;
 }
+#ResultsActualImg {
+	background: #5a6585;
+	border-radius: 5px;
+	margin-left: 1rem;
+}
 #ResultsContainer #ResultsList {
-    overflow-y: scroll;
-    padding-right: 1rem;
+	overflow-y: scroll;
+	padding-right: 1rem;
 }
 #ResultsList .score:not(:last-of-type) {
 	border-bottom: 3px solid #5a6585;
-    padding-bottom: 1rem;
+	padding-bottom: 1rem;
 }
 #ResultsContainer #ResultsActual {
 }
@@ -52,7 +57,7 @@
 	align-self: center;
 	z-index: 100;
 	position: relative;
-    margin-right: 310px;
+	margin-right: 310px;
 }
 #DrawingContainer canvas {
 	margin: 10px auto;
@@ -80,7 +85,7 @@
 	z-index: 50;
 }
 #ControlsContainer button {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 #PlayerListContainer {
 	position: absolute;

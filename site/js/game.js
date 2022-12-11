@@ -137,12 +137,15 @@ window.addEventListener("load", () => {
 			ctx.drawImage(currentImg, CANVAS_PADDING, CANVAS_PADDING);
 			for(let box of result.boxes) {
 				if(box.type === "HITBOX") {
-					ctx.strokeStyle = "red";
+					ctx.strokeStyle = DrawManager.HitboxStrokeStyle;
+					ctx.fillStyle = DrawManager.HitboxFillStyle;
 				} else {
-					ctx.strokeStyle = "lime";
+					ctx.strokeStyle = DrawManager.HurtboxStrokeStyle;
+					ctx.fillStyle = DrawManager.HurtboxFillStyle;
 				}
 				let rw = box.end.x - box.start.x;
 				let rh = box.end.y - box.start.y;
+				ctx.fillRect(box.start.x - 0.5, box.start.y - 0.5, rw, rh);
 				ctx.strokeRect(box.start.x - 0.5, box.start.y - 0.5, rw, rh);
 			}
 			ResultsList.appendChild(infoDiv);
@@ -153,6 +156,9 @@ window.addEventListener("load", () => {
 
 	function onBoxDraw(box) {
 		currentBoxes.push(box);
+		currentBoxes.sort((a, b) => {
+			return b.type === "HITBOX" ? -1 : 1;
+		});
 	}
 
 	function getCurrentBoxes() {
