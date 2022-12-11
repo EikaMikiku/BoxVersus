@@ -112,12 +112,12 @@ export default class GameServer {
 
 				player.isReady = true;
 
-				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
-
 				if(room.allPlayersReady() && room.players.length >= 1) {
 					this.io.to(room.id).emit("game start", GameManager.GetRandomMove());
 					room.onGameStart();
 				}
+
+				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
 			});
 
 			socket.on("round result", (boxData) => {
@@ -140,6 +140,23 @@ export default class GameServer {
 				}, 500);
 
 				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
+			});
+
+			socket.on("done mark", (val) => {
+				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
+				if(!room) return;
+
+				let player = room.getPlayerBySocketID(socket.id);
+				if(!player) return;
+
+				player.isDone = !!val;
+
+				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
+
+				//if all players are done, early round end
+				if(room.allPlayersDone()) {
+					this.io.to(room.id).emit("early end");
+				}
 			});
 
 			function checkForRoundEnd(room) {

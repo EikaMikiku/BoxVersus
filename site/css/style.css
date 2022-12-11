@@ -69,8 +69,11 @@
 	color: lime;
 }
 
-#PlayerList > div.submitted::after {
+#PlayerList > div.done::after {
 	content: " ✔️";
+}
+#PlayerList > div.submitted::after {
+	content: " ✅";
 }
 
 #ChatContainer {

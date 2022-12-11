@@ -8,6 +8,7 @@ export default class Player {
 		this.username = username || Player.GenerateUsername();
 		this.isReady = false;
 		this.boxData = null;
+		this.isDone = false;
 	}
 
 	getData() {
@@ -15,7 +16,8 @@ export default class Player {
 			username: this.username,
 			socketID: this.socket.id,
 			isReady: this.isReady,
-			submitted: !!this.boxData
+			submitted: !!this.boxData,
+			isDone: this.isDone
 		};
 	}
 }

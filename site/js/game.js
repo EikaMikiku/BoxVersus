@@ -9,6 +9,7 @@ window.addEventListener("load", () => {
 	let HitboxBrushButton = document.getElementById("HitboxBrushButton");
 	let HurtboxBrushButton = document.getElementById("HurtboxBrushButton");
 	let UndoButton = document.getElementById("UndoButton");
+	let DoneCheckbox = document.getElementById("DoneCheckbox");
 
 	const CANVAS_PADDING = 50;
 	const ROUND_TIME = 10 * 1000;
@@ -16,6 +17,8 @@ window.addEventListener("load", () => {
 	let currentBoxes = [];
 	let drawManager = new DrawManager(onBoxDraw, getCurrentBoxes);
 	let ctx = DrawingBGCanvas.getContext("2d");
+	let roundTimer = null;
+	let roundIntervalTimer = null;
 
 	HitboxBrushButton.addEventListener("click", () => {
 		HitboxBrushButton.classList.add("ms-action");
@@ -29,6 +32,10 @@ window.addEventListener("load", () => {
 
 	UndoButton.addEventListener("click", () => {
 		currentBoxes.splice(currentBoxes.length - 1, 1);
+	});
+
+	DoneCheckbox.addEventListener("change", () => {
+		window.SOCKET.emit("done mark", DoneCheckbox.checked);
 	});
 
 	window.SOCKET.on("game start", (data) => {
@@ -50,24 +57,32 @@ window.addEventListener("load", () => {
 			ctx.drawImage(img, CANVAS_PADDING, CANVAS_PADDING);
 
 			ShowTimedown(() => {
-				let timer;
 				let startTime = Date.now();
 				Timer.classList.remove("d-none");
 				drawManager.canDraw = true;
-				setTimeout(() => {
-					clearInterval(timer);
-					Timer.innerText = "";
-					Timer.classList.add("d-none");
-					drawManager.canDraw = false;
-
-					window.SOCKET.emit("round result", currentBoxes);
+				roundTimer = setTimeout(() => {
+					onRoundEnd()
 				}, ROUND_TIME);
-				timer = setInterval(() => {
+				roundIntervalTimer = setInterval(() => {
 					let sec = (Date.now() - startTime) / 1000;
 					Timer.innerText = (ROUND_TIME / 1000 - sec).toFixed(2) + "s";
 				});
 			});
 		});
+	});
+
+	function onRoundEnd() {
+		clearInterval(roundIntervalTimer);
+		Timer.innerText = "";
+		Timer.classList.add("d-none");
+		drawManager.canDraw = false;
+
+		window.SOCKET.emit("round result", currentBoxes);
+	}
+
+	window.SOCKET.on("early end", () => {
+		clearTimeout(roundTimer);
+		onRoundEnd();
 	});
 
 	window.SOCKET.on("round results", (data) => {

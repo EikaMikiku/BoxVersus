@@ -17,7 +17,6 @@ window.addEventListener("load", () => {
 			PlayerList.removeChild(PlayerList.firstChild);
 		}
 
-		console.log(list)
 		for(let player of list) {
 			let div = document.createElement("div");
 			div.setAttribute("p-id", player.socketID);
@@ -30,6 +29,8 @@ window.addEventListener("load", () => {
 
 			if(player.submitted) {
 				div.classList.add("submitted");
+			} else if(player.isDone) {
+				div.classList.add("done");
 			}
 
 			if(player.socketID === window.SOCKET.id) {
