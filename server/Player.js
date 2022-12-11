@@ -9,6 +9,7 @@ export default class Player {
 		this.isReady = false;
 		this.boxData = null;
 		this.isDone = false;
+		this.currentScore = 0;
 	}
 
 	getData() {
@@ -18,6 +19,15 @@ export default class Player {
 			isReady: this.isReady,
 			submitted: !!this.boxData,
 			isDone: this.isDone
+		};
+	}
+
+	getResults() {
+		return {
+			username: this.username,
+			socketID: this.socket.id,
+			score: this.currentScore,
+			boxes: this.boxData
 		};
 	}
 }

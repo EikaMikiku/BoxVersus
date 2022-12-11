@@ -10,15 +10,23 @@ window.addEventListener("load", () => {
 	let HurtboxBrushButton = document.getElementById("HurtboxBrushButton");
 	let UndoButton = document.getElementById("UndoButton");
 	let DoneCheckbox = document.getElementById("DoneCheckbox");
+	let ReadyButton = document.getElementById("ReadyButton");
+	let ResultsContainer = document.getElementById("ResultsContainer");
+	let ResultsList = document.getElementById("ResultsList");
+	let ResultsActual = document.getElementById("ResultsActual");
+	let ResultsActualImg = document.getElementById("ResultsActualImg");
+	let ResultsActualTxt = document.getElementById("ResultsActualTxt");
 
 	const CANVAS_PADDING = 50;
-	const ROUND_TIME = 10 * 1000;
+	const ROUND_TIME = 15 * 1000;
 
 	let currentBoxes = [];
 	let drawManager = new DrawManager(onBoxDraw, getCurrentBoxes);
 	let ctx = DrawingBGCanvas.getContext("2d");
 	let roundTimer = null;
 	let roundIntervalTimer = null;
+	let currentImageData = null;
+	let currentImg = null;
 
 	HitboxBrushButton.addEventListener("click", () => {
 		HitboxBrushButton.classList.add("ms-action");
@@ -31,7 +39,9 @@ window.addEventListener("load", () => {
 	});
 
 	UndoButton.addEventListener("click", () => {
-		currentBoxes.splice(currentBoxes.length - 1, 1);
+		if(drawManager.canDraw) {
+			currentBoxes.splice(currentBoxes.length - 1, 1);
+		}
 	});
 
 	DoneCheckbox.addEventListener("change", () => {
@@ -39,9 +49,13 @@ window.addEventListener("load", () => {
 	});
 
 	window.SOCKET.on("game start", (data) => {
+		ResultsContainer.classList.add("d-none");
+		DoneCheckbox.checked = false;
 		currentBoxes = [];
+		currentImageData = data;
 
 		LoadImage(`/img/sprites/${data.char}/none/${data.move}.png`, (img) => {
+			currentImg = img;
 			DrawingContainer.classList.remove("d-none");
 			DrawingImgDesc.innerText = `${data.char}: ${ParseMove(data.move)}`;
 			let w = img.width + CANVAS_PADDING + CANVAS_PADDING;
@@ -77,7 +91,7 @@ window.addEventListener("load", () => {
 		Timer.classList.add("d-none");
 		drawManager.canDraw = false;
 
-		window.SOCKET.emit("round result", currentBoxes);
+		window.SOCKET.emit("round result", currentBoxes, CANVAS_PADDING + 1);
 	}
 
 	window.SOCKET.on("early end", () => {
@@ -86,13 +100,58 @@ window.addEventListener("load", () => {
 	});
 
 	window.SOCKET.on("round results", (data) => {
-		//Show results, probably new class for canvas renders
-		//Show actual boxes
-		//Show Ready button for next round
+		DrawingContainer.classList.add("d-none");
+		ReadyButton.classList.remove("d-none");
+
+		showResults(data);
 	});
 
+	function showResults(data) {
+		ResultsContainer.classList.remove("d-none");
+		ResultsActualImg.src = currentImg.src.replace("none", "full");
+		ResultsActualImg.style.padding = CANVAS_PADDING + "px";
+		ResultsActualTxt.innerText = `Actual ${currentImageData.char} ${ParseMove(currentImageData.move)}:`;
+
+		data.sort((a, b) => {
+			return b.score - a.score;
+		});
+
+		while(ResultsList.childElementCount > 0) {
+			ResultsList.removeChild(ResultsList.firstChild);
+		}
+
+		for(let result of data) {
+			let infoDiv = document.createElement("h6");
+			infoDiv.innerText = `${currentImageData.char}'s ${ParseMove(currentImageData.move)} by ${result.username}:`;
+
+			let accDiv = document.createElement("h6");
+			accDiv.innerText = `${(result.score * 100).toFixed(3)}% accurate.`;
+			accDiv.className = "score";
+
+			let canvas = document.createElement("canvas");
+			let w = currentImg.width + CANVAS_PADDING + CANVAS_PADDING;
+			let h = currentImg.height + CANVAS_PADDING + CANVAS_PADDING;
+			canvas.width = w;
+			canvas.height = h;
+			let ctx = canvas.getContext("2d");
+			ctx.drawImage(currentImg, CANVAS_PADDING, CANVAS_PADDING);
+			for(let box of result.boxes) {
+				if(box.type === "HITBOX") {
+					ctx.strokeStyle = "red";
+				} else {
+					ctx.strokeStyle = "lime";
+				}
+				let rw = box.end.x - box.start.x;
+				let rh = box.end.y - box.start.y;
+				ctx.strokeRect(box.start.x - 0.5, box.start.y - 0.5, rw, rh);
+			}
+			ResultsList.appendChild(infoDiv);
+			ResultsList.appendChild(canvas);
+			ResultsList.appendChild(accDiv);
+		}
+	}
+
 	function onBoxDraw(box) {
-		console.log("box", box);
 		currentBoxes.push(box);
 	}
 
@@ -113,7 +172,7 @@ window.addEventListener("load", () => {
 				TimeOverlay.classList.add("d-none");
 				TimeOverlay.innerText = "";
 				cb();
-			}, 950);
+			}, 500);
 		}, 3000);
 		timer = setInterval(() => {
 			let sec = Math.ceil((Date.now() - startTime) / 1000);

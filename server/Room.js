@@ -4,6 +4,8 @@ export default  class Room {
 	constructor(id) {
 		this.id = id;
 		this.players = [];
+		this.currentMove = null;
+		this.roundEndTimer = null;
 	}
 
 	addPlayer(player) {
@@ -43,6 +45,14 @@ export default  class Room {
 	onGameStart() {
 		for(let player of this.players) {
 			player.isReady = false;
+		}
+	}
+	onGameEnd() {
+		for(let player of this.players) {
+			player.isReady = false;
+			player.boxData = null;
+			player.isDone = false;
+			player.currentScore = 0;
 		}
 	}
 }

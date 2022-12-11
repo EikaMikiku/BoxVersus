@@ -1,7 +1,7 @@
 function DrawManager(onBoxDraw, getBoxes) {
 	this.canDraw = false;
-	const HITBOX = "red";
-	const HURTBOX = "lime";
+	const HITBOX = "HITBOX";
+	const HURTBOX = "HURTBOX";
 
 	let DrawingBGCanvas = document.getElementById("DrawingBGCanvas");
 	let DrawingBoxesCanvas = document.getElementById("DrawingBoxesCanvas");
