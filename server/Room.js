@@ -6,6 +6,7 @@ export default  class Room {
 		this.players = [];
 		this.currentMove = null;
 		this.roundEndTimer = null;
+		this.roundDuration = 30;
 	}
 
 	addPlayer(player) {

@@ -1,11 +1,11 @@
 CreateRoomButton.onclick = function() {
-	fetch("/createRoom", {
+	let RoomRoundDuration = document.getElementById("RoomRoundDuration");
+	fetch("/createRoom?RoundDuration=" + RoomRoundDuration.value, {
 		method: "POST",
 		cache: "no-cache"
 	})
 	.then(r => r.text())
 	.then(roomID => {
-		alert(`Room ID: ${roomID}`);
 		window.location = "/room/" + roomID;
 	});
 };

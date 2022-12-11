@@ -18,7 +18,6 @@ window.addEventListener("load", () => {
 	let ResultsActualTxt = document.getElementById("ResultsActualTxt");
 
 	const CANVAS_PADDING = 50;
-	const ROUND_TIME = 15 * 1000;
 
 	let currentBoxes = [];
 	let drawManager = new DrawManager(onBoxDraw, getCurrentBoxes);
@@ -76,10 +75,10 @@ window.addEventListener("load", () => {
 				drawManager.canDraw = true;
 				roundTimer = setTimeout(() => {
 					onRoundEnd()
-				}, ROUND_TIME);
+				}, window.ROUND_TIME);
 				roundIntervalTimer = setInterval(() => {
 					let sec = (Date.now() - startTime) / 1000;
-					Timer.innerText = (ROUND_TIME / 1000 - sec).toFixed(2) + "s";
+					Timer.innerText = (window.ROUND_TIME / 1000 - sec).toFixed(2) + "s";
 				});
 			});
 		});
@@ -156,9 +155,11 @@ window.addEventListener("load", () => {
 
 	function onBoxDraw(box) {
 		currentBoxes.push(box);
+		/*
 		currentBoxes.sort((a, b) => {
 			return b.type === "HITBOX" ? -1 : 1;
 		});
+		*/
 	}
 
 	function getCurrentBoxes() {

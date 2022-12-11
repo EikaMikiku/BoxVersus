@@ -72,6 +72,16 @@ export default class GameServer {
 
 				if(room.players.length === 0) {
 					this.roomManager.startRoomExpiry(room);
+				} else {
+					if(room.allPlayersReady() && room.players.length >= 1) {
+						room.currentMove = GameManager.GetRandomMove();
+						this.io.to(room.id).emit("game start", room.currentMove);
+						room.onGameStart();
+					} else {
+						if(room.allPlayersDone()) {
+							this.io.to(room.id).emit("early end");
+						}
+					}
 				}
 			});
 
@@ -182,7 +192,15 @@ export default class GameServer {
 			return res.status(200).send(this.viewManager.render("index.ejs"));
 		});
 		this.app.post("/createRoom", (req, res) => {
-			return res.status(200).send(this.roomManager.createRoom().id);
+			let roundDuration = parseInt(req.query.RoundDuration);
+			if(typeof roundDuration !== "number") roundDuration = 30;
+			if(roundDuration.toString() !== req.query.RoundDuration) roundDuration = 30;
+			if(roundDuration < 10) roundDuration = 10;
+			if(roundDuration > 1000) roundDuration = 1000;
+
+			let room = this.roomManager.createRoom();
+			room.roundDuration = roundDuration;
+			return res.status(200).send(room.id);
 		});
 		this.app.get("/room/:roomID", (req, res) => {
 			let roomID = req.params.roomID;
@@ -192,7 +210,8 @@ export default class GameServer {
 			}
 
 			return res.status(200).send(this.viewManager.render("game.ejs", {
-				roomID: roomID
+				roomID: roomID,
+				roomRoundDuration: this.roomManager.getRoom(roomID).roundDuration
 			}));
 		});
 	}
