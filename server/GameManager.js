@@ -1,6 +1,10 @@
 import fs from "fs";
 
 const MOVES_LOCATION = "./server/moves";
+const HITBOX_POINT = 2;
+const HURTBOX_POINT = 1;
+const HITBOX_OUT_PENALTY = 1;
+const HURTBOX_OUT_PENALTY = 0.5;
 
 export default class GameManager {
 	static GetRandomMove() {
@@ -34,13 +38,13 @@ export default class GameManager {
 			for(let y = 0; y <= dims.h; y++) {
 				for(let box of currentMove.data.hurtboxes) {
 					if(pointInBox(x, y, box)) {
-						currentMoveHurtboxArea++;
+						currentMoveHurtboxArea += HURTBOX_POINT;
 						break;
 					}
 				}
 				for(let box of currentMove.data.hitboxes) {
 					if(pointInBox(x, y, box)) {
-						currentMoveHitboxArea++;
+						currentMoveHitboxArea += HITBOX_POINT;
 						break;
 					}
 				}
@@ -71,9 +75,9 @@ export default class GameManager {
 							}
 						}
 						if(isIn) {
-							hitboxMap[`${x}:${y}`] = 1;
+							hitboxMap[`${x}:${y}`] = HITBOX_POINT;
 						} else {
-							hitboxMap[`${x}:${y}`] = -1;
+							hitboxMap[`${x}:${y}`] = -HITBOX_OUT_PENALTY;
 						}
 					} else {
 						let isIn = false;
@@ -86,9 +90,9 @@ export default class GameManager {
 							}
 						}
 						if(isIn) {
-							hurtboxMap[`${x}:${y}`] = 1;
+							hurtboxMap[`${x}:${y}`] = HURTBOX_POINT;
 						} else {
-							hurtboxMap[`${x}:${y}`] = -1;
+							hurtboxMap[`${x}:${y}`] = -HURTBOX_OUT_PENALTY;
 						}
 					}
 				}
