@@ -7,6 +7,7 @@ export default  class Room {
 		this.currentMove = null;
 		this.roundEndTimer = null;
 		this.roundDuration = 30;
+		this.currentlyPlaying = [];
 	}
 
 	addPlayer(player) {
@@ -19,7 +20,11 @@ export default  class Room {
 
 	removePlayerBySocketID(socketID) {
 		let idx = this.players.findIndex(p => p.socket.id === socketID);
-		return this.players.splice(idx, 1);
+		this.players.splice(idx, 1)
+		idx = this.currentlyPlaying.findIndex(p => p.socket.id === socketID)
+		if(idx >= 0) {
+			this.currentlyPlaying.splice(idx, 1);
+		}
 	}
 
 	startExpiring(cb) {
@@ -40,12 +45,13 @@ export default  class Room {
 	}
 
 	allPlayersDone() {
-		return !this.players.find(player => !player.isDone);
+		return !this.currentlyPlaying.find(player => !player.isDone);
 	}
 
 	onGameStart() {
 		for(let player of this.players) {
 			player.isReady = false;
+			this.currentlyPlaying.push(player);
 		}
 	}
 	onGameEnd() {
@@ -55,5 +61,7 @@ export default  class Room {
 			player.isDone = false;
 			player.currentScore = 0;
 		}
+		this.currentlyPlaying = [];
+		this.currentMove = null;
 	}
 }

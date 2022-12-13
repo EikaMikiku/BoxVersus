@@ -41,6 +41,7 @@ export default class GameServer {
 					username: player.username
 				});
 				this.roomManager.stopRoomExpiry(room);
+				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
 			});
 
 			socket.on("chat message", (content) => {
@@ -69,6 +70,8 @@ export default class GameServer {
 				this.io.to(room.id).emit("player left", {
 					username: player.username
 				});
+
+				this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
 
 				if(room.players.length === 0) {
 					this.roomManager.startRoomExpiry(room);
@@ -133,7 +136,7 @@ export default class GameServer {
 
 			socket.on("round result", (boxData, boxOffset) => {
 				let room = this.roomManager.getRoomByPlayerSocketID(socket.id);
-				if(!room) return;
+				if(!room || !room.currentMove) return;
 
 				let player = room.getPlayerBySocketID(socket.id);
 				if(!player) return;
@@ -148,8 +151,8 @@ export default class GameServer {
 					let roundEndOK = checkForRoundEnd(room);
 					if(roundEndOK) {
 						//Send over results
-						this.io.to(room.id).emit("round results", room.players.map(x => x.getResults()));
-						//Reset player states
+						this.io.to(room.id).emit("round results", room.currentlyPlaying.map(x => x.getResults()));
+						//Reset player/room states
 						room.onGameEnd();
 						//Send new states
 						this.io.to(room.id).emit("player list", room.players.map(x => x.getData()));
@@ -177,7 +180,7 @@ export default class GameServer {
 			});
 
 			function checkForRoundEnd(room) {
-				for(let player of room.players) {
+				for(let player of room.currentlyPlaying) {
 					if(!player.boxData) {
 						return false;
 					}
