@@ -10,5 +10,10 @@ CreateRoomButton.onclick = function() {
 	});
 };
 JoinRoomButton.onclick = function() {
-	window.location = "/room/" + prompt("Enter a room ID:");
+	let roomID = prompt("Enter a room ID:");
+	if(!roomID) {
+		alert("Enter the room ID.");
+	} else {
+		window.location = "/room/" + prompt("Enter a room ID:");
+	}
 };

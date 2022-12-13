@@ -1,6 +1,6 @@
 export default class Player {
 	static GenerateUsername() {
-		return "" + Math.floor(Math.random() * 10000);
+		return "User" + Math.floor(Math.random() * 10000);
 	}
 
 	constructor(socket, username) {

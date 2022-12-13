@@ -11,6 +11,9 @@
 		window.SOCKET = io();
 		window.SOCKET.on("connect", () => {
 			let username = window.localStorage.getItem("username") || prompt("Enter your username");
+			if(!username) {
+				username = "User" + Math.floor(Math.random() * 10000);
+			}
 			window.localStorage.setItem("username", username);
 			window.SOCKET.emit("join room", window.ROOMID, window.localStorage.getItem("username"));
 		});

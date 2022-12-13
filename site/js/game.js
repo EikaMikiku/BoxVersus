@@ -94,6 +94,9 @@ window.addEventListener("load", () => {
 	}
 
 	window.SOCKET.on("early end", () => {
+		if(!currentImg) {
+			return;
+		}
 		clearTimeout(roundTimer);
 		onRoundEnd();
 	});
@@ -106,6 +109,9 @@ window.addEventListener("load", () => {
 	});
 
 	function showResults(data) {
+		if(!currentImg) {
+			return;
+		}
 		ResultsContainer.classList.remove("d-none");
 		ResultsActualImg.src = currentImg.src.replace("none", "full");
 		ResultsActualImg.style.padding = CANVAS_PADDING + "px";
